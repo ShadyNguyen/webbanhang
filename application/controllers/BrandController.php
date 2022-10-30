@@ -41,18 +41,43 @@ class BrandController extends CI_Controller {
         $this->form_validation->set_rules('description', 'Description', 'trim|required',['required'=>'Bạn chưa nhập %s']);
 		if ($this->form_validation->run() == TRUE)
 		{
-            $data = [
-                'title' => $this->input->post('title'),
-                'description' => $this->input->post('description'),
-                'slug' => $this->input->post('slug'),
-                'status' => $this->input->post('status'),
-                //'image' => $brand_filename
+            //upload ảnh
+            $ori_filename = $_FILES['image']['name']; // lấy ảnh
+            $new_name = time()."".str_replace('','-',$ori_filename);// chỉnh tên ảnh
+            $config = [
+                'upload_path' => './uploads/brand',
+                'allowed_types' => 'gif|jpg|png|jpeg',
+                'file_name' => $new_name,
             ];
+            //move_uploaded_file(path,$new_name)
+            $this->load->library('upload',$config);
+            if( ! $this->upload->do_upload('image'))
+            {
+                $error = array('error' => $this->upload->display_errors());
+                $this->load->view('admin_template/header');
+                $this->load->view('admin_template/navbar');
+                $this->load->view('brand/create',$error);
+                $this->load->view('admin_template/footer');
+              //  $this->load->view('upload_form',$error);
+            }
+            else
+            {
+                $brand_filename = $this->upload->data('file_name');
+                $data = [
+                    'title' => $this->input->post('title'),
+                    'description' => $this->input->post('description'),
+                    'slug' => $this->input->post('slug'),
+                    'status' => $this->input->post('status'),
+                    'image' => $brand_filename
+                ];
+                
+                $this->load->model('BrandModel');
+                $this->BrandModel->insertBrand($data);
+                $this->session->set_flashdata('success','Thêm Thành công');
+                redirect(base_url('brand/create'));
+            }
+
             
-            $this->load->model('BrandModel');
-            $this->BrandModel->insertBrand($data);
-            $this->session->set_flashdata('success','Thêm Thành công');
-            redirect(base_url('brand/create'));
         }
         else
         {

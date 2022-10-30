@@ -16,7 +16,7 @@
                 <?php 
                 }
            ?>
-        <form action="<?php echo base_url('brand/store') ?>" method="post">
+        <form action="<?php echo base_url('brand/store') ?>" method="post" enctype="mutipart/form-data">
             <div class="form-group">
                 <label for="exampleInputEmail1">Title</label>
                 <input type="text" name="title" class="form-control" id="exampleInputEmail1" >
@@ -38,6 +38,7 @@
             <div class="form-group">
                 <label for="exampleInputPassword1">Image</label>
                 <input type="file" class="form-control-file" name="image" id="exampleInputPassword1">
+                <small><?php if(isset($error)){ echo $error;} ?></small>
             </div>
 
             <div class="form-group">
