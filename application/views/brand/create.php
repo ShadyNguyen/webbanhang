@@ -37,7 +37,7 @@
 
             <div class="form-group">
                 <label for="exampleInputPassword1">Image</label>
-                <input type="file" class="form-control-file" name="image" id="exampleInputPassword1">
+                <input type="file" class="form-control-file" name="image" id="image">
                 <small><?php if(isset($error)){ echo $error;} ?></small>
             </div>
 
@@ -50,7 +50,7 @@
                     </select>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="submit"  class="btn btn-primary">Add</button>
          </form>
         </div>
     </div>
