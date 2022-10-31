@@ -3,7 +3,9 @@
         <div class="card-header">
             List Brands
         </div>
+      
         <div class="card-body">
+        <a href="<?php echo base_url('brand/create') ?>" class="btn btn-primary">Add</a>
            <table class="table">
             <thead class="thead-dark">
                 <tr>

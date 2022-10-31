@@ -21,6 +21,11 @@
             return $this->db->update('brands',$data,['id'=>$id]);
         }
 
+        public function deleteBrand($id)
+        {
+            return $this->db->delete('brands',['id'=>$id]);
+        }
+
 
     }
 

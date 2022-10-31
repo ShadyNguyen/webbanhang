@@ -43,7 +43,7 @@ class BrandController extends CI_Controller {
         $this->form_validation->set_rules('title', 'Title', 'trim|required',['required'=>'Bạn chưa nhập %s']);
 		$this->form_validation->set_rules('slug', 'Slug', 'trim|required',['required'=>'Bạn chưa nhập %s']);
         $this->form_validation->set_rules('description', 'Description', 'trim|required',['required'=>'Bạn chưa nhập %s']);
-        $this->form_validation->set_rules('status', 'Status', 'required');
+       // $this->form_validation->set_rules('status', 'Status', 'required');
 		if ($this->form_validation->run() == TRUE)
 		{
             //upload ảnh
@@ -79,7 +79,7 @@ class BrandController extends CI_Controller {
                 $this->load->model('BrandModel');
                 $this->BrandModel->insertBrand($data);
                 $this->session->set_flashdata('success','Thêm Thành công');
-                redirect(base_url('brand/create'));
+                redirect(base_url('brand/list'));
             }
 
             
@@ -98,7 +98,6 @@ class BrandController extends CI_Controller {
 
         $this->load->model('BrandModel');
         $data['brand'] = $this->BrandModel->selectBrandByID($id);
-
 
         $this->load->view('brand/edit',$data);
         $this->load->view('admin_template/footer');
@@ -164,6 +163,12 @@ class BrandController extends CI_Controller {
     else
         {
             $this->edit($id);
-        }
+       }
 }
+    public function delete($id){
+        $this->load->model('BrandModel');
+        $this->BrandModel->deleteBrand($id);
+        $this->session->set_flashdata('success','Xóa Thành công');
+        redirect(base_url('brand/list'));
+    }
 }

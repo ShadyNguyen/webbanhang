@@ -4,6 +4,7 @@
             Create Brands
         </div>
         <div class="card-body">
+        <a href="<?php echo base_url('brand/list') ?>" class="btn btn-success">List</a>
         <?php
             if($this->session->flashdata('success')){
                 ?>
