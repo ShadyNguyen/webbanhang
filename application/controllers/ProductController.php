@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class BrandController extends CI_Controller {
+class ProductController extends CI_Controller {
 
    
 
@@ -20,10 +20,10 @@ class BrandController extends CI_Controller {
             $this->load->view('admin_template/header');
             $this->load->view('admin_template/navbar'); 
             
-            $this->load->model('BrandModel');
-            $data['brand'] = $this->BrandModel->selectBrand();
+            $this->load->model('ProductModel');
+            $data['product'] = $this->ProductModel->selectAllProduct();
 
-            $this->load->view('brand/list',$data);
+            $this->load->view('product/list',$data);
             $this->load->view('admin_template/footer');
        
 	}
@@ -33,7 +33,14 @@ class BrandController extends CI_Controller {
             $this->checkLogin();
             $this->load->view('admin_template/header');
             $this->load->view('admin_template/navbar');
-            $this->load->view('brand/create');
+            //gọi category
+            $this->load->model('CategoryModel');
+            $data['category'] = $this->CategoryModel->selectCategory();
+            //gọi brand
+            $this->load->model('BrandModel');
+            $data['brand'] = $this->BrandModel->selectBrand();
+
+            $this->load->view('product/create',$data);
             $this->load->view('admin_template/footer');
        
 	}
@@ -41,8 +48,8 @@ class BrandController extends CI_Controller {
     public function store()
     {
         $this->form_validation->set_rules('title', 'Title', 'trim|required',['required'=>'Bạn chưa nhập %s']);
-		$this->form_validation->set_rules('slug', 'Slug', 'trim|required',['required'=>'Bạn chưa nhập %s']);
         $this->form_validation->set_rules('description', 'Description', 'trim|required',['required'=>'Bạn chưa nhập %s']);
+        $this->form_validation->set_rules('quantity', 'Quantity', 'trim|required',['required'=>'Bạn chưa nhập %s']);
        // $this->form_validation->set_rules('status', 'Status', 'required');
 		if ($this->form_validation->run())
 		{
@@ -50,7 +57,7 @@ class BrandController extends CI_Controller {
             $ori_filename = $_FILES['image']['name']; // lấy ảnh
             $new_name = time()."".str_replace(' ','-',$ori_filename);// chỉnh tên ảnh
             $config = [
-                'upload_path' => './uploads/brand',
+                'upload_path' => './uploads/product',
                 'allowed_types' => 'gif|jpg|png|jpeg',
                 'file_name' => $new_name,
             ];
@@ -61,28 +68,29 @@ class BrandController extends CI_Controller {
                 $error = array('error' => $this->upload->display_errors());
                 $this->load->view('admin_template/header');
                 $this->load->view('admin_template/navbar');
-                $this->load->view('brand/create',$error);
+                $this->load->view('product/create',$error);
                 $this->load->view('admin_template/footer');
               //  $this->load->view('upload_form',$error);
             }
             else
             {
-                $brand_filename = $this->upload->data('file_name');
+                $product_filename = $this->upload->data('file_name');
                 $data = [
                     'title' => $this->input->post('title'),
                     'description' => $this->input->post('description'),
-                    'slug' => $this->input->post('slug'),
+                   // 'slug' => $this->input->post('slug'),
                     'status' => $this->input->post('status'),
-                    'image' => $brand_filename
+                    'category_id' => $this->input->post('category_id'),
+                    'brand_id' => $this->input->post('brand_id'),
+                    'quantity' => $this->input->post('quantity'),
+                    'image' => $product_filename
                 ];
                 
-                $this->load->model('BrandModel');
-                $this->BrandModel->insertBrand($data);
+                $this->load->model('ProductModel');
+                $this->ProductModel->insertProduct($data);
                 $this->session->set_flashdata('success','Thêm Thành công');
-                redirect(base_url('brand/list'));
+                redirect(base_url('product/list'));
             }
-
-            
         }
         else
         {
@@ -96,18 +104,25 @@ class BrandController extends CI_Controller {
         $this->load->view('admin_template/header');
         $this->load->view('admin_template/navbar');
 
+        //gọi category
+        $this->load->model('CategoryModel');
+        $data['category'] = $this->CategoryModel->selectCategory();
+        //gọi brand
         $this->load->model('BrandModel');
-        $data['brand'] = $this->BrandModel->selectBrandByID($id);
+        $data['brand'] = $this->BrandModel->selectBrand();
+        //gọi theo id
+        $this->load->model('ProductModel');
+        $data['product'] = $this->ProductModel->selectProductByID($id);
 
-        $this->load->view('brand/edit',$data);
+        $this->load->view('product/edit',$data);
         $this->load->view('admin_template/footer');
     }
 
     public function update($id)
     {
         $this->form_validation->set_rules('title', 'Title', 'trim|required',['required'=>'Bạn chưa nhập %s']);
-		$this->form_validation->set_rules('slug', 'Slug', 'trim|required',['required'=>'Bạn chưa nhập %s']);
         $this->form_validation->set_rules('description', 'Description', 'trim|required',['required'=>'Bạn chưa nhập %s']);
+        $this->form_validation->set_rules('quantity', 'Quantity', 'trim|required',['required'=>'Bạn chưa nhập %s']);
        // $this->form_validation->set_rules('status', 'Status', 'required');
 		if ($this->form_validation->run() == TRUE)
 		{
@@ -116,7 +131,7 @@ class BrandController extends CI_Controller {
             $ori_filename = $_FILES['image']['name']; // lấy ảnh
             $new_name = time()."".str_replace(' ','-',$ori_filename);// chỉnh tên ảnh
             $config = [
-                'upload_path' => './uploads/brand',
+                'upload_path' => './uploads/product',
                 'allowed_types' => 'gif|jpg|png|jpeg',
                 'file_name' => $new_name,
             ];
@@ -127,19 +142,22 @@ class BrandController extends CI_Controller {
                 $error = array('error' => $this->upload->display_errors());
                 $this->load->view('admin_template/header');
                 $this->load->view('admin_template/navbar');
-                $this->load->view('brand/create',$error);
+                $this->load->view('product/create',$error);
                 $this->load->view('admin_template/footer');
               //  $this->load->view('upload_form',$error);
             }
             else
             {
-                $brand_filename = $this->upload->data('file_name');
+                $product_filename = $this->upload->data('file_name');
                 $data = [
                     'title' => $this->input->post('title'),
                     'description' => $this->input->post('description'),
-                    'slug' => $this->input->post('slug'),
+                   // 'slug' => $this->input->post('slug'),
                     'status' => $this->input->post('status'),
-                    'image' => $brand_filename
+                    'category_id' => $this->input->post('category_id'),
+                    'brand_id' => $this->input->post('brand_id'),
+                    'quantity' => $this->input->post('quantity'),
+                    'image' => $product_filename
                 ];
                 
                
@@ -148,16 +166,19 @@ class BrandController extends CI_Controller {
             $data = [
                 'title' => $this->input->post('title'),
                 'description' => $this->input->post('description'),
-                'slug' => $this->input->post('slug'),
+                //'slug' => $this->input->post('slug'),
                 'status' => $this->input->post('status'),
+                'category_id' => $this->input->post('category_id'),
+                'brand_id' => $this->input->post('brand_id'),
+                'quantity' => $this->input->post('quantity'),
                 //'image' => $brand_filename
             ];
             
         }
-        $this->load->model('BrandModel');
-        $this->BrandModel->updateBrand($id,$data);
+        $this->load->model('ProductModel');
+        $this->ProductModel->updateProduct($id,$data);
         $this->session->set_flashdata('success','Sửa Thành công');
-        redirect(base_url('brand/list'));
+        redirect(base_url('product/list'));
         
     }
     else
@@ -166,9 +187,9 @@ class BrandController extends CI_Controller {
         }
 }
     public function delete($id){
-        $this->load->model('BrandModel');
-        $this->BrandModel->deleteBrand($id);
+        $this->load->model('ProductModel');
+        $this->ProductModel->deleteProduct($id);
         $this->session->set_flashdata('success','Xóa Thành công');
-        redirect(base_url('brand/list'));
+        redirect(base_url('product/list'));
     }
 }

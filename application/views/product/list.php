@@ -1,9 +1,8 @@
 <div class="container">
     <div class="card">
         <div class="card-header">
-            List Brands
+            List Product
         </div>
-      
         <?php
             if($this->session->flashdata('success')){
                 ?>
@@ -17,14 +16,16 @@
                 }
            ?>
         <div class="card-body">
-        <a href="<?php echo base_url('brand/create') ?>" class="btn btn-primary">Add</a>
+        <a href="<?php echo base_url('product/create') ?>" class="btn btn-primary">Add</a>
            <table class="table">
             <thead class="thead-dark">
                 <tr>
                 <th scope="col">STT</th>
                 <th scope="col">Title</th>
-                <th scope="col">Slug</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Category</th>
                 <th scope="col">Description</th>
+                <th scope="col">Quantity</th>
                 <th scope="col">Image</th>
                 <th scope="col">Status</th>
                 <th scope="col">Manager</th>
@@ -32,20 +33,22 @@
             </thead>
             <tbody>
                 <?php 
-                    foreach($brand as $key => $bra){
+                    foreach($product as $key => $pro){
                 ?>
                 <tr>
                 <th scope="row"><?php echo $key ?></th>
-                <td><?php echo $bra->title ?></td>
-                <td><?php echo $bra->slug ?></td>
-                <td><?php echo $bra->description ?></td>
+                <td><?php echo $pro->title ?></td>
+                <td><?php echo $pro->tenthuonghieu ?></td>
+                <td><?php echo $pro->tendanhmuc ?></td>
+                <td><?php echo $pro->description ?></td>
+                <td><?php echo $pro->quantity ?></td>
                 
                 <td>
-                    <img src=" <?php echo base_url('uploads/brand/'.$bra->image)  ?>" width="150" height="150" alt="">
+                    <img src=" <?php echo base_url('uploads/product/'.$pro->image)  ?>" width="150" height="150" alt="">
                 </td>
                 <td>
                     <?php
-                        if($bra->status==1){
+                        if($pro->status==1){
                             echo 'Active';
                         }
                         else{
@@ -54,8 +57,8 @@
                     ?>
                 </td>
                 <td>
-                    <a href="<?php echo base_url('brand/edit/'.$bra->id) ?>" class="btn btn-warning">Edit</a>
-                    <a href="<?php echo base_url('brand/delete/'.$bra->id) ?>" class="btn btn-danger">Delete</a>
+                    <a href="<?php echo base_url('product/edit/'.$pro->id) ?>" class="btn btn-warning">Edit</a>
+                    <a href="<?php echo base_url('product/delete/'.$pro->id) ?>" class="btn btn-danger">Delete</a>
                 </td>
                 </tr>
 
