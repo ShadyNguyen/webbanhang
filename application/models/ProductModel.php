@@ -11,7 +11,7 @@
             ->from('categories')
             ->join('products','products.category_id=categories.id')
             ->join('brands','brands.id=products.brand_id')
-           ->get();
+            ->get();
             return $query->result();
         }
 

@@ -52,7 +52,7 @@
                        <?php 
                         foreach($category as $key => $cat){
                         ?>
-                        <option value="<?php echo $cat->id==$product->category_id ? 'selected' : '' ?>"><?php echo $cat->title ?></option>
+                        <option <?php echo $cat->id==$product->category_id ? 'selected' : '' ?>  value="<?php echo $cat->id ?>"><?php echo $cat->title ?></option>
 
                         <?php
                         }
@@ -68,7 +68,7 @@
                     <?php 
                         foreach($brand as $key => $bra){
                         ?>
-                        <option value="<?php echo $bra->id==$product->brand_id ? 'selected' : '' ?>"><?php echo $bra->title ?></option>
+                         <option <?php echo $bra->id==$product->brand_id ? 'selected' : '' ?>  value="<?php echo $bra->id ?>"><?php echo $bra->title ?></option>
 
                         <?php
                         }
