@@ -53,6 +53,13 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+//home
+$route['danh-muc/(:any)']['GET'] = 'IndexController/category/$1';
+$route['thuong-hieu/(:any)']['GET'] = 'IndexController/brand/$1';
+$route['san-pham/(:any)']['GET'] = 'IndexController/product/$1';
+$route['gio-hang']['GET'] = 'IndexController/cart';
+$route['dang-nhap']['GET'] = 'IndexController/login';
+
 //login
 $route['login']['GET']='LoginController/index';
 $route['login-user']['POST']='LoginController/login';

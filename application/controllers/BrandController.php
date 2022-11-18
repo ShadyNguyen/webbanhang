@@ -2,9 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class BrandController extends CI_Controller {
-
-   
-
+aaa
     public function checkLogin()
     {
         if(!$this->session->userdata('LoggedIn'))
